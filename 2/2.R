@@ -5,8 +5,8 @@ library(dplyr)
 library(tidyr)
 
 df <- readLines('2.in') %>%
-  map(~ str_match(.x, "^(.*?)-(.*?)\\s(.*?)\\:\\s(.*?)$")) %>%
-  map_dfr(~ set_names(.x, c('string', 'n1', 'n2', 'l', 'pwd'))) %>%
+  map_dfr(~ str_match(.x, "^(.*?)-(.*?)\\s(.*?)\\:\\s(.*?)$") %>%
+			  set_names(c('string', 'n1', 'n2', 'l', 'pwd'))) %>%
   mutate(n1 = as.integer(n1), n2 = as.integer(n2))
 
 df %>%
