@@ -23,11 +23,11 @@ def valid_eyes(s):
 
 
 print(sum(1 for i in data if valid_keys.issubset(set(i.keys())) and 
-    1920 <= int(i.get('byr')) <= 2002 and 
-    2010 <= int(i.get('iyr')) <= 2020 and
-    2020 <= int(i.get('eyr')) <= 2030 and
-    valid_height(i.get('hgt')) and
-    re.match(r'^#[a-f0-9]{6}$', i.get('hcl')) and
-    valid_eyes(i.get('ecl')) and
-    re.match(r'^[0-9]{9}$', i.get('pid'))
+    1920 <= int(i['byr']) <= 2002 and 
+    2010 <= int(i['iyr']) <= 2020 and
+    2020 <= int(i['eyr']) <= 2030 and
+    valid_height(i['hgt']) and
+    re.match(r'^#[a-f0-9]{6}$', i['hcl']) and
+    valid_eyes(i['ecl']) and
+    re.match(r'^[0-9]{9}$', i['pid'])
     ))
