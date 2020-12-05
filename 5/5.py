@@ -5,7 +5,7 @@ def get_seat_index(s):
     bin_map = [['F', '0'], ['B', '1'], ['R', '1'], ['L', '0']]
     for x, y in bin_map:
         s = s.replace(x,y)
-    return int(s[:7], 2)*8 + int(s[7:], 2)
+    return int(s, 2)
 
 seat_indexes = set(get_seat_index(s) for s in data)
 
