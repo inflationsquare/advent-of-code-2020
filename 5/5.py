@@ -3,7 +3,7 @@ with open('5.in', 'r') as f:
 
 def get_seat_index(s):
     bin_map = {'F': '0', 'B': '1', 'R': '1', 'L': '0'}
-    s = ''.join(map(lambda c: bin_map[c], s))
+    s = ''.join(bin_map[c] for c in  s)
     return int(s, 2)
 
 seat_indexes = set(get_seat_index(s) for s in data)
