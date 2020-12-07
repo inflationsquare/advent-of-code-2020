@@ -24,14 +24,14 @@ ancestors = set(get_ancestors('shiny gold'))
 print(len(ancestors))
 
 
-def get_children(name):
+def get_descendants(name):
     children = [*itertools.chain.from_iterable([x]*y for x, y in rules[name].items())]
     if not children:
         return children
     else:
-        return children + [*itertools.chain.from_iterable(get_children(x) for x in children)]
+        return children + [*itertools.chain.from_iterable(get_descendants(x) for x in children)]
 
-print(len(get_children('shiny gold')))
+print(len(get_descendants('shiny gold')))
 
 
 
