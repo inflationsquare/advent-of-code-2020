@@ -10,7 +10,6 @@ child_pattern = re.compile(r'(\d+) ([\w\s?]+) bags?')
 
 parents = map(lambda x: parent_pattern.findall(x[0]), data)
 children = map(lambda x: child_pattern.findall(x[1]), data)
-
 rules = {p[0]: {x[1]: int(x[0]) for x in c} for p, c in zip(parents, children)}
 
 def get_ancestors(name):
@@ -19,8 +18,8 @@ def get_ancestors(name):
         return parents
     else:
         return parents + [*itertools.chain.from_iterable(get_ancestors(x) for x in parents)]
-    
-ancestors = set(get_ancestors('shiny gold')) 
+
+ancestors = set(get_ancestors('shiny gold'))
 print(len(ancestors))
 
 
@@ -32,8 +31,4 @@ def get_descendants(name):
         return children + [*itertools.chain.from_iterable(get_descendants(x) for x in children)]
 
 print(len(get_descendants('shiny gold')))
-
-
-
-
 
