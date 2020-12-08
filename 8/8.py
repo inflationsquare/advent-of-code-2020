@@ -1,5 +1,4 @@
 import re
-import copy
 
 with open("8.in", "r") as f:
     data = f.read().splitlines()
@@ -30,49 +29,33 @@ class Interpreter:
     def run(self, swapop=None):
         while self.instructions[self.ptr][0] not in self.visited_instructions:
             ix, op, arg = self.instructions[self.ptr]
+
             if swapop and ix == swapop:
                 if op == "jmp":
                     op = "nop"
                 elif op == "nop":
                     op = "jmp"
+
             self.op(op, arg)
             self.visited_instructions.add(ix)
             if self.ptr == len(self.instructions):
-                return self.acc
-        return None
+                return {"code": 0, "result": self.acc}
+        return {"code": 1, "result": self.acc}
 
     def reset(self):
         self.acc = 0
         self.ptr = 0
         self.visited_instructions = set()
 
-    def find_loop(self):
-        while self.instructions[self.ptr][0] not in self.visited_instructions:
-            ix, op, arg = self.instructions[self.ptr]
-            self.op(op, arg)
-            self.visited_instructions.add(ix)
-        return self.acc
-
-    def find_unreachable(self):
-        target = len(self.instructions)
-        instruction_targets = [(i[0], i[0] + i[2] if i[1] == "jmp" else i[0] + 1) for i in self.instructions]
-
-        def recur(target):
-            if target not in [x[1] for x in instruction_targets]:
-                return target
-            else:
-                new_target = next(filter(lambda x: x[1] == target, instruction_targets))[0]
-                return recur(new_target)
-
-        return recur(target)
-
 
 machine = Interpreter(instructions)
-print(machine.find_loop())
+print(machine.run()["result"])
+machine.reset()
 
 swappable = [i[0] for i in filter(lambda x: x[1] in ["jmp", "nop"], instructions)]
 for swap in swappable:
-    fixed_machine = Interpreter(instructions)
-    result = fixed_machine.run(swap)
-    if result:
-        print(result)
+    result = machine.run(swap)
+    machine.reset()
+    if result["code"] == 0:
+        print(result["result"])
+        break
