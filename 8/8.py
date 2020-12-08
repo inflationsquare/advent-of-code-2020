@@ -52,7 +52,7 @@ machine = Interpreter(instructions)
 print(machine.run()["result"])
 machine.reset()
 
-swappable = [i[0] for i in filter(lambda x: x[1] in ["jmp", "nop"], instructions)]
+swappable = [i[0] for i in instructions if i[1] in ["jmp", "nop"]]
 for swap in swappable:
     result = machine.run(swap)
     machine.reset()
