@@ -50,9 +50,10 @@ class Interpreter:
 
 machine = Interpreter(instructions)
 print(machine.run()["result"])
+looped_nodes = machine.visited_instructions
 machine.reset()
 
-swappable = [i[0] for i in instructions if i[1] in ["jmp", "nop"]]
+swappable = [i[0] for i in instructions if i[1] in ["jmp", "nop"] and i[0] in looped_nodes]
 for swap in swappable:
     result = machine.run(swap)
     machine.reset()
