@@ -1,3 +1,5 @@
+from collections import deque
+
 with open("9.in", "r") as f:
     data = [int(x) for x in f.read().splitlines()]
 
@@ -18,12 +20,23 @@ def find_first_invalid(start, end, data):
 
 
 first_invalid = find_first_invalid(0, 25, data)
+print(first_invalid)
 
-matching_array = next(
-    data[i : i + j]
-    for i in range(0, len(data))
-    for j in range(2, len(data) - i + 1)
-    if sum(data[i : i + j]) == first_invalid
-)
+# move across the array like a snake, grow the right until it's greater than the target, then shrink from the left until it's smaller than the target, repeat until equal to the target
+invalid_summer = deque()
+running_total = 0
+data_stream = iter(data)
 
-print(min(matching_array) + max(matching_array))
+while running_total != first_invalid:
+    if running_total < first_invalid:
+        next_number = next(data_stream)
+        invalid_summer.append(next_number)
+        running_total += next_number
+    elif running_total > first_invalid:
+        tail_number = invalid_summer[0]
+        invalid_summer.popleft()
+        running_total -= tail_number
+    else:
+        pass
+
+print(min(invalid_summer) + max(invalid_summer))
