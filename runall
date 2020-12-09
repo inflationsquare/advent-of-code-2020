@@ -1,0 +1,1 @@
+for x in `ls -d */`; do (cd $x; echo "Day $x"; time python3 *.py; echo "\n"); done 
