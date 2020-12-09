@@ -27,7 +27,7 @@ invalid_summer = deque()
 running_total = 0
 data_stream = iter(data)
 
-while running_total != first_invalid:
+while running_total != first_invalid or len(invalid_summer) == 1:
     if running_total < first_invalid:
         next_number = next(data_stream)
         invalid_summer.append(next_number)
