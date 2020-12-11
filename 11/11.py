@@ -1,13 +1,12 @@
-from itertools import product, permutations
-from itertools import chain
+from itertools import chain, product, permutations
 from collections import Counter
 
 with open("11.in", "r") as f:
-    data = [[y for y in x] for x in f.read().splitlines()]
+    data = [x for x in f.read().splitlines()]
 
 
 def print_data(d):
-    print("\n".join("".join(x for x in y) for y in d))
+    print("\n".join(y for y in d))
     print("\n")
 
 
@@ -22,13 +21,11 @@ def get_nn(data, x, y, x_by, y_by):
     while True:
         x += x_by
         y += y_by
-        try:
-            assert x >= 0
-            assert y >= 0
+        if x < 0 or y < 0 or x >= len(data[0]) or y >= len(data):
+            return None
+        else:
             if data[y][x] != ".":
                 return (x, y)
-        except:
-            return None
 
 
 def change(status, adjacent):
@@ -44,8 +41,8 @@ def change(status, adjacent):
 
 indices = [*product(range(len(data[0])), range(len(data)))]
 
-by = set([*permutations([-1, -1, 0, 1, 1], 2)])
-neighbours = {(x, y): [get_nn(data, x, y, x_by, y_by) for x_by, y_by in by] for x, y in indices if data[y][x] != "."}
+by = set(permutations([-1, -1, 0, 1, 1], 2))
+neighbours = {(x, y): [get_nn(data, x, y, x_by, y_by) for x_by, y_by in by] for x, y in indices}
 for key, value in neighbours.items():
     neighbours[key] = [x for x in neighbours[key] if x]
 
