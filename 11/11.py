@@ -2,7 +2,7 @@ from itertools import product
 from itertools import chain
 from collections import Counter
 
-with open("test.in", "r") as f:
+with open("11.in", "r") as f:
     data = [[y for y in x] for x in f.read().splitlines()]
 
 
@@ -56,14 +56,14 @@ nearest_neighbours = {(x, y): get_adjacent_2(data, x, y) for x, y in indices}
 
 
 def stabilise(data):
-    new_data = [[x for x in "." * len(data[0])] for x in range(len(data))]
-    for x, y in indices:
-        adjacent = Counter(data[j][i] for i, j in nearest_neighbours[(x, y)])
-        new_data[y][x] = change(data[y][x], adjacent)
+    new_data = {x: "." for x in indices}
+    for x in indices:
+        adjacent = Counter(data[(i, j)] for i, j in nearest_neighbours[x])
+        new_data[x] = change(data[x], adjacent)
     if new_data == data:
-        return Counter(chain.from_iterable(new_data))
+        return Counter(new_data.values())
     else:
         return stabilise(new_data)
 
 
-print(stabilise(data))
+print(stabilise({(x, y): data[y][x] for x, y in indices}))
