@@ -1,4 +1,4 @@
-from itertools import product
+from itertools import product, permutations
 from itertools import chain
 from collections import Counter
 
@@ -18,26 +18,17 @@ def get_adjacent(d, x, y):
     return adjacent
 
 
-def get_adjacent_2(d, x, y):
-    indices = [[i, j] for i, j in product(range(len(d[0])), range(len(d))) if [x, y] != [i, j]]
-    chairs = [[i, j] for i, j in indices if d[j][i] != "."]
-    offsets = [[i - x, j - y] for i, j in chairs]
-    line_of_sight = [
-        [i, j, dx, dy] for [[i, j], [dx, dy]] in zip(chairs, offsets) if dx == 0 or dy == 0 or abs(dx) == abs(dy)
-    ]
-
-    directions = [
-        [[i, j, abs(dx) + abs(dy)] for [i, j, dx, dy] in line_of_sight if dx > 0 and dy == 0],
-        [[i, j, abs(dx) + abs(dy)] for [i, j, dx, dy] in line_of_sight if dx < 0 and dy == 0],
-        [[i, j, abs(dx) + abs(dy)] for [i, j, dx, dy] in line_of_sight if dx == 0 and dy > 0],
-        [[i, j, abs(dx) + abs(dy)] for [i, j, dx, dy] in line_of_sight if dx == 0 and dy < 0],
-        [[i, j, abs(dx) + abs(dy)] for [i, j, dx, dy] in line_of_sight if dx > 0 and dy > 0],
-        [[i, j, abs(dx) + abs(dy)] for [i, j, dx, dy] in line_of_sight if dx < 0 and dy < 0],
-        [[i, j, abs(dx) + abs(dy)] for [i, j, dx, dy] in line_of_sight if dx < 0 and dy > 0],
-        [[i, j, abs(dx) + abs(dy)] for [i, j, dx, dy] in line_of_sight if dx > 0 and dy < 0],
-    ]
-
-    return [sorted(l, key=lambda q: q[-1])[0][:2] for l in directions if l]
+def get_nn(data, x, y, x_by, y_by):
+    while True:
+        x += x_by
+        y += y_by
+        try:
+            assert x >= 0
+            assert y >= 0
+            if data[y][x] != ".":
+                return (x, y)
+        except:
+            return None
 
 
 def change(status, adjacent):
@@ -52,14 +43,19 @@ def change(status, adjacent):
 
 
 indices = [*product(range(len(data[0])), range(len(data)))]
-nearest_neighbours = {(x, y): get_adjacent_2(data, x, y) for x, y in indices}
+
+by = set([*permutations([-1, -1, 0, 1, 1], 2)])
+neighbours = {(x, y): [get_nn(data, x, y, x_by, y_by) for x_by, y_by in by] for x, y in indices if data[y][x] != "."}
+for key, value in neighbours.items():
+    neighbours[key] = [x for x in neighbours[key] if x]
 
 
 def stabilise(data):
     new_data = {x: "." for x in indices}
     for x in indices:
-        adjacent = Counter(data[(i, j)] for i, j in nearest_neighbours[x])
-        new_data[x] = change(data[x], adjacent)
+        if data[x] != ".":
+            adjacent = Counter(data[(i, j)] for i, j in neighbours[x])
+            new_data[x] = change(data[x], adjacent)
     if new_data == data:
         return Counter(new_data.values())
     else:
