@@ -1,5 +1,4 @@
 from math import prod
-from sympy import mod_inverse
 import time
 
 with open("13.in") as f:
@@ -17,7 +16,7 @@ print(prod(earliest_bus))
 
 def chinese_remainder(n, a):
     p = prod(n)
-    total = sum(y * mod_inverse(p // x, x) * (p // x) for x, y in zip(n, a))
+    total = sum(y * pow(p // x, -1, x) * (p // x) for x, y in zip(n, a))
     return total % p
 
 
