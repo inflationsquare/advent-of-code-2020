@@ -17,8 +17,6 @@ def apply_mask(s, m):
 
 
 storage = {}
-
-
 mask = ""
 for [(op, addr, val)] in instructions:
     if op == "mask":
@@ -31,35 +29,28 @@ print(sum(storage.values()))
 # ---
 
 
-def generate_addrs(adr, m):
+def generate_addrs(adr, mask):
     change = []
-    bits = list(bin(int(adr)))[2:]
-
-    for a, b in zip(["0"] * (36 - len(bits)) + bits, ["0"] * (36 - len(list(m))) + list(m)):
-        if b == "1":
-            change.append("1")
-        if b == "0":
-            change.append(a)
-        if b == "X":
-            change.append("X")
-
+    bits = format(int(adr), "036b")
+    mask = mask.zfill(36)
+    change = [b if m == "0" else m for b, m in zip(bits, mask)]
     to_replace = [i for i, v in enumerate(change) if v == "X"]
     floating = len(to_replace)
+
     for vals in product(*(["0", "1"] for _ in range(floating))):
         for i, v in zip(to_replace, vals):
             change[i] = v
-        yield "".join(change)
+        yield int("".join(change), 2) % 2 ** 36 - 1
 
 
 storage = {}
 mask = ""
-high = int("".join(["1"] * 36), 2)
 for [(op, addr, val)] in instructions:
     if op == "mask":
         mask = val
     else:
         for a in generate_addrs(addr, mask):
-            storage[int(a, 2) % high] = int(val)
+            storage[a] = int(val)
 
 
 print(sum(storage.values()))
