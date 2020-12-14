@@ -1,7 +1,5 @@
 import re
 from itertools import product
-from collections import Counter
-from functools import reduce
 
 pattern = re.compile("^(\w*)\[?(\d+)?\]?\s=\s(.*)$")
 
