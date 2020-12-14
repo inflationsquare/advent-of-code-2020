@@ -30,7 +30,7 @@ print(sum(storage.values()))
 def generate_adrs(adr, mask):
     masked = (b if m == "0" else m for b, m in zip(format(int(adr), "036b"), mask.zfill(36)))
     adrs = (x for x in product(*(x if x != "X" else "01" for x in masked)))
-    yield from map(lambda x: int("".join(x), 2) % 2 ** 36 - 1, adrs)
+    yield from map(lambda x: int("".join(x), 2) % (1 << 36), adrs)
 
 
 storage = {}
