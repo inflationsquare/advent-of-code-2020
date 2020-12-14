@@ -1,7 +1,7 @@
 import re
 from itertools import product
 
-pattern = re.compile("^(\w*)\[?(\d+)?\]?\s=\s(.*)$")
+pattern = re.compile("^(\w*)(?:\[(\d+)\]|)\s=\s([0-9X]+)$")
 
 with open("14.in", "r") as f:
     data = f.read().splitlines()
