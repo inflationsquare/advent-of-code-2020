@@ -34,7 +34,7 @@ def generate_addrs(adr, mask):
     to_replace = [i for i, v in enumerate(change) if v == "X"]
     floating = len(to_replace)
 
-    for vals in product(*(["0", "1"] for _ in range(floating))):
+    for vals in product(*("01" for _ in range(floating))):
         for i, v in zip(to_replace, vals):
             change[i] = v
         yield int("".join(change), 2) % 2 ** 36 - 1
@@ -48,6 +48,5 @@ for [(op, addr, val)] in instructions:
     else:
         for a in generate_addrs(addr, mask):
             storage[a] = int(val)
-
 
 print(sum(storage.values()))
