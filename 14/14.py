@@ -28,7 +28,6 @@ print(sum(storage.values()))
 
 
 def generate_addrs(adr, mask):
-    change = []
     bits = format(int(adr), "036b")
     mask = mask.zfill(36)
     change = [b if m == "0" else m for b, m in zip(bits, mask)]
