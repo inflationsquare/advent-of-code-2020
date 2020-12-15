@@ -7,17 +7,18 @@ turn = len(input)
 number = input[-1]
 storage = {}
 for i, v in enumerate(input):
-    storage[v] = storage.get(v, []) + [i + 1]
+    storage[v] = i + 1
 
 
-while turn < 2020:
-    if len(storage.get(number)) == 1:
+while turn < 30000000:
+    if not storage.get(number, None):
+        storage[number] = turn
         number = 0
         turn += 1
-        storage[number] = storage.get(number, []) + [turn]
     else:
-        number = turn - storage[number][-2]
+        last_seen = storage[number]
+        storage[number] = turn
+        number = turn - last_seen
         turn += 1
-        storage[number] = storage.get(number, [])[-2:] + [turn]
 
 print(number)
