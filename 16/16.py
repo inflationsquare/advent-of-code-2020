@@ -19,18 +19,12 @@ with open("16.in", "r") as f:
 
 print(sum(x for x in chain.from_iterable(tickets) if not any(r(x) for r in rules.values())))
 
-valid_tickets = [t for t in tickets if all(any(r(x) for r in rules.values()) for x in t)]
-
-
-def num_matches(x):
-    return sum(r(x) for r in rules.values())
-
 
 # ---
 
-identifiable = [[num_matches(t) for t in ticket] for ticket in valid_tickets]
-fields = {}
+valid_tickets = [t for t in tickets if all(any(r(x) for r in rules.values()) for x in t)]
 
+fields = {}
 for idx in range(len(valid_tickets[0])):
     vals = [x[idx] for x in valid_tickets]
     for n, f in rules.items():
