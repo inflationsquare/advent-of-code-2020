@@ -32,14 +32,11 @@ for idx in range(len(valid_tickets[0])):
             fields[idx] = fields.get(idx, []) + [n]
 
 final_fields = {}
-while not all(y == 1 for y in [len(x) for x in fields.values()]):
-    try:
-        val = [(k, v) for k, v in fields.items() if len(v) == 1][0]
-        final_fields[val[0]] = val[1][0]
-        for k, v in fields.items():
-            fields[k] = [x for x in v if x != val[1][0]]
-    except:
-        break
+while len(final_fields.keys()) < len(fields.keys()):
+    val = [(k, v) for k, v in fields.items() if len(v) == 1][0]
+    final_fields[val[0]] = val[1][0]
+    for k, v in fields.items():
+        fields[k] = [x for x in v if x != val[1][0]]
 
 needed_fields = [k for k, v in final_fields.items() if v[:9] == "departure"]
 my_ticket = [int(x) for x in own_ticket[1].split(",")]
