@@ -1,7 +1,6 @@
-from itertools import product, chain
-from functools import reduce, lru_cache
+from itertools import product
+from functools import reduce
 import operator as op
-from pprint import pprint
 
 
 def get_neighbour_coordinates(p):
@@ -9,7 +8,6 @@ def get_neighbour_coordinates(p):
     return [tuple(sum(x) for x in zip(p, d)) for d in deltas]
 
 
-@lru_cache()
 def new_status(status, local_status):
     if status == "#" and local_status in [2, 3]:
         return "#"
